@@ -1,0 +1,82 @@
+# client.yaml - the one file the prospect-to-sequence skill reads for everything client-specific.
+# Fill this in during intake (the skill asks you each question). Never put API keys in this file;
+# keys go in .env next to it.
+
+client:
+  name: ""                      # e.g. Acme Security Co
+  sender_name: ""               # the person the messages come from
+  sender_first_name: ""
+  website: ""
+  booking_url: ""
+
+offer:
+  # What you give the prospect for replying. Message 3 and the ask depend on this.
+  asset: ""                     # e.g. "1-page security teardown of your public website"
+  how_it_is_made: ""            # what you inspect to build it, e.g. "public portal, email, intake"
+  cost_to_prospect: "no cost, no call needed"
+  proof_available: false        # true only if you have real client results you may cite
+  authority_line: "soft"        # soft = "bit of context on me", no client claims
+
+icp:
+  industry: ""
+  who_we_target: ""             # roles, e.g. practice managers, directors of operations
+  qualifies_if: []              # rules a company/person must meet
+  exclude_if: []                # rules that drop a row, each recorded as an exclusion reason
+  dedupe_against: []            # earlier batches, live lists, existing customers
+
+  fit_criteria:                 # used by the qualification step; ask the user, do not guess
+    target_description: ""      # plain words, e.g. "B2B SaaS companies selling to compliance teams"
+    industries_include: []      # e.g. [SaaS, compliance software]
+    industries_exclude: []
+    business_models_include: [] # e.g. [B2B SaaS, managed services]
+    business_models_exclude: [] # e.g. [agency, consultancy, B2C]
+    company_size: {min_employees: 0, max_employees: 0}   # 0 = no limit
+    roles_include: []           # titles that count
+    roles_exclude: []           # titles that never count
+    min_months_in_role: 0       # 0 = ignore; short tenure is flagged either way
+    prior_experience_bonus: []  # industries in work history that raise confidence
+    require_evidence: true      # a criterion with no source is UNKNOWN, never FIT
+
+platform:
+  linkedin: heyreach            # heyreach | closely | none
+  email: none                   # smartlead | manyreach | none
+  heyreach:
+    sender_account_id: ""       # from get_all_linked_in_accounts
+    schedule: "Mon-Fri 09:00-17:00"
+    timezone: "America/New_York"
+  closely:
+    notes: "No native MCP is connected. Deliver the send-ready CSV and import it in the Closely UI."
+
+sequence:
+  connection_request: ""        # blank note recommended
+  withdraw_after_days: 14
+  message1: "hey {FIRST_NAME}, how's it going"
+  delay_msg2_days: 1
+  delay_msg3_days: 2
+  message3_template: ""         # opener + one exposure sentence + one curiosity question
+  fallback_msg2: ""             # variables allowed: FIRST_NAME, LAST_NAME, MY_FIRST_NAME, MY_LAST_NAME
+  fallback_msg3: ""
+
+voice:
+  rules:
+    - no exclamation marks and no emojis
+    - lowercase, plain, short
+  banned_phrases: []
+
+risky_claims:
+  # Things that are true but could embarrass the sender or hurt the prospect. Fact-check agents mark these RISKY.
+  # Ask the client; examples: layoffs, lawsuits, funding troubles, personal topics, health of the prospect.
+  topics: []
+
+enrichment:
+  linkedin_posts_actor: "harvestapi~linkedin-profile-posts"
+  profile_scraper_actor: "harvestapi~linkedin-profile-scraper"   # returns current role and full work history, no cookies; mode "Profile details no email ($4 per 1k)"
+  max_budget_usd: 5
+
+approvals:
+  # The skill stops and asks at each of these.
+  gate1_after_analysis: true
+  gate2_before_paid_enrichment: true   # cost estimate approved before enrich --yes
+  gate3_after_qualification: true      # user decides the MAYBEs
+  gate4_before_upload: true
+  never_start_campaign: true    # the human presses Start

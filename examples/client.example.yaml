@@ -1,0 +1,85 @@
+# Fictional worked example. Copy the shape, not the values.
+client:
+  name: "Acme Security Co"
+  sender_name: "Jordan Lee"
+  sender_first_name: "Jordan"
+  website: "acmesecurity.example"
+  booking_url: "https://cal.example/jordan"
+
+offer:
+  asset: "1-page security teardown of your public website and email setup"
+  how_it_is_made: "public DNS records, website headers and the posted privacy policy; nothing logged into"
+  cost_to_prospect: "no cost, no call needed"
+  proof_available: false
+  authority_line: "soft"
+
+icp:
+  industry: "dental and orthodontic groups"
+  who_we_target: "practice managers and directors of operations"
+  qualifies_if:
+    - three or more locations
+    - person is still in the role and at the company
+  exclude_if:
+    - solo practice
+    - vendor or consultant rather than a practice
+    - already contacted in an earlier batch
+  dedupe_against:
+    - earlier batches
+    - existing customers
+
+  fit_criteria:
+    target_description: "multi-location dental and orthodontic groups"
+    industries_include: ["dental", "orthodontics"]
+    industries_exclude: ["dental supply", "dental software vendors"]
+    business_models_include: ["multi-location practice group", "dental support organization"]
+    business_models_exclude: ["consultancy", "staffing agency"]
+    company_size: {min_employees: 20, max_employees: 0}
+    roles_include: ["practice manager", "director of operations", "regional operations director"]
+    roles_exclude: ["student", "intern", "retired"]
+    min_months_in_role: 0
+    prior_experience_bonus: ["dental"]
+    require_evidence: true
+
+platform:
+  linkedin: heyreach
+  email: none
+  heyreach:
+    sender_account_id: "000000"
+    schedule: "Mon-Fri 09:00-17:00"
+    timezone: "America/New_York"
+  closely:
+    notes: "export the send-ready CSV and import it in the Closely UI"
+
+sequence:
+  connection_request: ""
+  withdraw_after_days: 14
+  message1: "hey {FIRST_NAME}, how's it going"
+  delay_msg2_days: 1
+  delay_msg3_days: 2
+  message3_template: "bit of context on me - I put together 1-page security teardowns for <category> from what is visible publicly. <one sentence tied to their setup>. curious, <one concrete question about their stack>?"
+  fallback_msg2: ""
+  fallback_msg3: ""
+
+voice:
+  rules:
+    - no exclamation marks and no emojis
+    - lowercase, plain, short
+  banned_phrases: ["guarantee", "free"]
+
+risky_claims:
+  topics:
+    - layoffs, lawsuits or data breaches at the prospect's company
+    - personal or health topics from posts
+    - stale news presented as recent
+
+enrichment:
+  linkedin_posts_actor: "harvestapi~linkedin-profile-posts"
+  profile_scraper_actor: "harvestapi~linkedin-profile-scraper"   # returns current role and full work history, no cookies; mode "Profile details no email ($4 per 1k)"
+  max_budget_usd: 5
+
+approvals:
+  gate1_after_analysis: true
+  gate2_before_paid_enrichment: true   # cost estimate approved before enrich --yes
+  gate3_after_qualification: true      # user decides the MAYBEs
+  gate4_before_upload: true
+  never_start_campaign: true
