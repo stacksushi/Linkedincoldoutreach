@@ -1,5 +1,7 @@
 # prospect-to-sequence
 
+> Claude Code skill and scripts that turn a raw LinkedIn prospect list into a qualified, fact-checked outreach sequence, loaded as a draft (never auto-started).
+
 A repeatable way to turn a raw prospect list into a fact-checked outbound sequence, loaded as a **draft** campaign in your sending tool. It is a Claude Code skill plus a small Python script that does the mechanical work around it.
 
 The core idea: AI is good at writing personalized openers and bad at knowing which of its claims are true. This repo puts a **fact-check gate** between the writing and the sending. In the campaigns this was built for, the gate removed or corrected claims in roughly 35 to 45 percent of the prospects the writer agents had drafted (wrong titles, outdated news, invented site counts).
